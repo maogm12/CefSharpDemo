@@ -30,12 +30,16 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.打开ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CsCallJs1Menu = new System.Windows.Forms.ToolStripMenuItem();
+            this.CsCallJs2Menu = new System.Windows.Forms.ToolStripMenuItem();
+            this.devToolsMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.jsCallCsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.关于ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMeMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.mainPanel = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,6 +47,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.文件ToolStripMenuItem,
+            this.测试ToolStripMenuItem,
             this.关于ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -53,30 +58,63 @@
             // 文件ToolStripMenuItem
             // 
             this.文件ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.打开ToolStripMenuItem,
-            this.保存ToolStripMenuItem,
-            this.退出ToolStripMenuItem});
+            this.openMenu,
+            this.exitMenu});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
             this.文件ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.文件ToolStripMenuItem.Text = "文件";
             // 
-            // 打开ToolStripMenuItem
+            // openMenu
             // 
-            this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
-            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.打开ToolStripMenuItem.Text = "打开";
+            this.openMenu.Name = "openMenu";
+            this.openMenu.Size = new System.Drawing.Size(152, 22);
+            this.openMenu.Text = "打开";
             // 
-            // 保存ToolStripMenuItem
+            // exitMenu
             // 
-            this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
-            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.保存ToolStripMenuItem.Text = "保存";
+            this.exitMenu.Name = "exitMenu";
+            this.exitMenu.Size = new System.Drawing.Size(152, 22);
+            this.exitMenu.Text = "退出";
+            this.exitMenu.Click += new System.EventHandler(this.exitMenu_Click);
             // 
-            // 退出ToolStripMenuItem
+            // 测试ToolStripMenuItem
             // 
-            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.退出ToolStripMenuItem.Text = "退出";
+            this.测试ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CsCallJs1Menu,
+            this.CsCallJs2Menu,
+            this.devToolsMenu,
+            this.jsCallCsMenu});
+            this.测试ToolStripMenuItem.Name = "测试ToolStripMenuItem";
+            this.测试ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.测试ToolStripMenuItem.Text = "测试";
+            // 
+            // CsCallJs1Menu
+            // 
+            this.CsCallJs1Menu.Name = "CsCallJs1Menu";
+            this.CsCallJs1Menu.Size = new System.Drawing.Size(152, 22);
+            this.CsCallJs1Menu.Text = "C# Call JS 1";
+            this.CsCallJs1Menu.Click += new System.EventHandler(this.cs2js1Menu_Click);
+            // 
+            // CsCallJs2Menu
+            // 
+            this.CsCallJs2Menu.Name = "CsCallJs2Menu";
+            this.CsCallJs2Menu.Size = new System.Drawing.Size(152, 22);
+            this.CsCallJs2Menu.Text = "C# Call JS 2";
+            this.CsCallJs2Menu.Click += new System.EventHandler(this.cs2js2Menu_Click);
+            // 
+            // devToolsMenu
+            // 
+            this.devToolsMenu.Name = "devToolsMenu";
+            this.devToolsMenu.Size = new System.Drawing.Size(152, 22);
+            this.devToolsMenu.Text = "DevTools";
+            this.devToolsMenu.Click += new System.EventHandler(this.devToolsMenu_Click);
+            // 
+            // jsCallCsMenu
+            // 
+            this.jsCallCsMenu.Name = "jsCallCsMenu";
+            this.jsCallCsMenu.Size = new System.Drawing.Size(152, 22);
+            this.jsCallCsMenu.Text = "JS Call C#";
+            this.jsCallCsMenu.Click += new System.EventHandler(this.jsCallCsMenu_Click);
             // 
             // 关于ToolStripMenuItem
             // 
@@ -89,24 +127,24 @@
             // aboutMeMenu
             // 
             this.aboutMeMenu.Name = "aboutMeMenu";
-            this.aboutMeMenu.Size = new System.Drawing.Size(152, 22);
+            this.aboutMeMenu.Size = new System.Drawing.Size(112, 22);
             this.aboutMeMenu.Text = "关于我";
             this.aboutMeMenu.Click += new System.EventHandler(this.aboutMeMenu_Click);
             // 
-            // panel1
+            // mainPanel
             // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 25);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(784, 536);
-            this.panel1.TabIndex = 1;
+            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanel.Location = new System.Drawing.Point(0, 25);
+            this.mainPanel.Name = "mainPanel";
+            this.mainPanel.Size = new System.Drawing.Size(784, 536);
+            this.mainPanel.TabIndex = 1;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
@@ -123,12 +161,16 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 文件ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 打开ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 保存ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openMenu;
+        private System.Windows.Forms.ToolStripMenuItem exitMenu;
         private System.Windows.Forms.ToolStripMenuItem 关于ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutMeMenu;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel mainPanel;
+        private System.Windows.Forms.ToolStripMenuItem 测试ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CsCallJs1Menu;
+        private System.Windows.Forms.ToolStripMenuItem CsCallJs2Menu;
+        private System.Windows.Forms.ToolStripMenuItem devToolsMenu;
+        private System.Windows.Forms.ToolStripMenuItem jsCallCsMenu;
     }
 }
 
