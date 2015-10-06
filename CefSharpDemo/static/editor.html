@@ -26,13 +26,28 @@
   </head>
   <body>
     <form class="pure-form">
-        <textarea class="pure-input-1" placeholder="我是文本框"></textarea>
-        <button type="submit" class="pure-button pure-input-1 pure-button-primary">保存</button>
+        <textarea id="editor" class="pure-input-1" placeholder="我是文本框"></textarea>
+        <button type="submit" class="pure-button pure-input-1 pure-button-primary" onclick="save(); return false;">保存</button>
     </form>
     <script type="text/javascript">
       function callCs() {
         alert(cef.stringProp);
         cef.showHelloCef();
+      }
+
+      function loadText(path, txt) {
+          editor.value = txt;
+          editor.dataset.path = path;
+      }
+
+      function save() {
+          var data = new FormData();
+          data.append("path", editor.dataset.path);
+          data.append("content", editor.value);
+
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.open("POST", "http://cef/file", true);
+          xmlHttp.send(data);
       }
     </script>
   </body>

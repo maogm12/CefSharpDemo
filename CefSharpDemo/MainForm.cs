@@ -3,7 +3,10 @@ using System.Windows.Forms;
 using CefSharp;
 using CefSharp.WinForms;
 using System.IO;
+using System.Web;
 using System.Threading.Tasks;
+using System.Net;
+using System.Text;
 
 namespace CefSharpDemo
 {
@@ -27,8 +30,18 @@ namespace CefSharpDemo
 
         private void initEditor()
         {
-            var editorInfo = new FileInfo(@".\static\editor.html");
-            _browser = new ChromiumWebBrowser(editorInfo.FullName)
+            // cef setting
+            var setting = new CefSettings();
+            setting.RegisterScheme(new CefCustomScheme()
+            {
+                SchemeName = LocalSchemeHandler.SchemeName,
+                SchemeHandlerFactory = new LocalSchemeHanlderFactory()
+            });
+            Cef.Initialize(setting);
+
+//            var editorInfo = new FileInfo(@".\static\editor.html");
+//            _browser = new ChromiumWebBrowser(editorInfo.FullName)
+            _browser = new ChromiumWebBrowser("http://cef/editor.html")
             {
                 Dock = DockStyle.Fill
             };
@@ -93,7 +106,28 @@ namespace CefSharpDemo
         {
             Application.Exit();
         }
-        
+
+        private void openMenu_Click(object sender, EventArgs e)
+        {
+            openFileDialog.ShowDialog();
+        }
+
+        private void openFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            string fileName = openFileDialog.FileName;
+            if (_browser != null)
+            {
+                // load file
+                _browser.ExecuteScriptAsync(string.Format(@"
+(function(){{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open('GET', 'http://cef/file?path={0}&nocache=' + (new Date()).getTime(), false);
+    xmlHttp.send(null);
+    loadText('{0}', xmlHttp.responseText);
+}})();
+", HttpUtility.UrlEncode(fileName)));
+            }
+        }
     }
 
     internal class CefCallTest
@@ -108,6 +142,104 @@ namespace CefSharpDemo
         public CefCallTest()
         {
             StringProp = "Hello, Cef";
+        }
+    }
+
+    internal class LocalSchemeHanlderFactory : ISchemeHandlerFactory
+    {
+        public IResourceHandler Create(IBrowser browser, IFrame frame, string schemeName, IRequest request)
+        {
+            if (schemeName == LocalSchemeHandler.SchemeName)
+            {
+                return new LocalSchemeHandler();
+            }
+
+            return null;
+        }
+    }
+
+    internal class LocalSchemeHandler : IResourceHandler
+    {
+        public const string SchemeName = "http";
+        private string mimeType;
+        private MemoryStream stream;
+        private int statusCode;
+        private string statusText;
+
+        public Stream GetResponse(IResponse response, out long responseLength, out string redirectUrl)
+        {
+            responseLength = stream.Length;
+            redirectUrl = null;
+
+            response.StatusCode = statusCode;
+            response.StatusText = statusText;
+            response.MimeType = mimeType;
+
+            return stream;
+        }
+
+        public bool ProcessRequestAsync(IRequest request, ICallback callback)
+        {
+            var uri = new Uri(request.Url);
+            var fileName = uri.AbsolutePath;
+
+            if (fileName == "/pure-min.css")
+            {
+                var content = File.ReadAllText(@".\static\pure-min.css");
+                stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+                mimeType = "text/css";
+                statusText = "OK";
+                statusCode = (int)HttpStatusCode.OK;
+                callback.Continue();
+                return true;
+            }
+
+            if (fileName == "/editor.html")
+            {
+                var content = File.ReadAllText(@".\static\editor.html");
+                stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+                mimeType = "text/html";
+                statusText = "OK";
+                statusCode = (int)HttpStatusCode.OK;
+                callback.Continue();
+                return true;
+            }
+
+            if (fileName == "/file")
+            {
+                if (request.Method == "GET")
+                {
+                    var param = HttpUtility.ParseQueryString(uri.Query);
+                    var path = param["path"];
+                    if (File.Exists(path))
+                    {
+                        var content = File.ReadAllText(path);
+                        stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+                        mimeType = "text/plain";
+                        statusText = "OK";
+                        statusCode = (int)HttpStatusCode.OK;
+                        callback.Continue();
+                        return true;
+                    }
+                }
+                else if (request.Method == "POST")
+                {
+                    var elems = request.PostData.Elements;
+                    if (elems != null && elems.Count > 0)
+                    {
+                        var data = elems[0].GetBody("utf8");
+                        MessageBox.Show(data);
+
+                        // @todo
+                    }
+                }
+            }
+
+            stream = new MemoryStream();
+            statusText = "404 error";
+            statusCode = (int)HttpStatusCode.NotFound;
+            callback.Continue();
+            return true;
         }
     }
 }

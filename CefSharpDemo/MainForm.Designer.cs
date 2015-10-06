@@ -40,6 +40,7 @@
             this.关于ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMeMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +70,7 @@
             this.openMenu.Name = "openMenu";
             this.openMenu.Size = new System.Drawing.Size(152, 22);
             this.openMenu.Text = "打开";
+            this.openMenu.Click += new System.EventHandler(this.openMenu_Click);
             // 
             // exitMenu
             // 
@@ -139,6 +141,13 @@
             this.mainPanel.Size = new System.Drawing.Size(784, 536);
             this.mainPanel.TabIndex = 1;
             // 
+            // openFileDialog
+            // 
+            this.openFileDialog.Filter = "Text files (*.txt)|*.txt";
+            this.openFileDialog.Title = "打开文件";
+            this.openFileDialog.ValidateNames = false;
+            this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -171,6 +180,7 @@
         private System.Windows.Forms.ToolStripMenuItem CsCallJs2Menu;
         private System.Windows.Forms.ToolStripMenuItem devToolsMenu;
         private System.Windows.Forms.ToolStripMenuItem jsCallCsMenu;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
 
